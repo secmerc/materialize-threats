@@ -1,0 +1,4 @@
+*.icloud
+*.pyc
+__pycache__/
+venv/
