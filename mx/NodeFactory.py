@@ -9,13 +9,14 @@ class NodeFactory:
         super(NodeFactory, self).__init__()
         self.coords = coords
 
-    def from_xml(self, xml):
+    def from_xml(self, xml, value):
         texts = []
         texts.append(Text.from_xml(xml.get('style')))
     
         return Node(
             sid=xml.get('id'),
             gid=xml.get('parent'),
+            value=value,
             rect=Rect(
                 x=int(xml.find('mxGeometry').get('x')),
                 y=int(xml.find('mxGeometry').get('y')),
@@ -27,6 +28,7 @@ class NodeFactory:
             stroke=None
         )
 
+'''
     def rect_from_svg_points(self, svg):
         points = svg.split(" ")
         points = [self.coords.translate(*p.split(",")) for p in points]
@@ -91,3 +93,4 @@ class NodeFactory:
             fill=g.attrib.get("fill", None),
             stroke=stroke,
         )
+'''

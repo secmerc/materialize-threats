@@ -3,8 +3,10 @@ from .GraphObj import GraphObj
 
 
 class Edge(GraphObj):
-    def __init__(self, sid, gid, fr, to, curve):
-        super(Edge, self).__init__(sid, gid)
+    def __init__(self, sid, gid, value, fr, to, curve):
+       
+        super(Edge, self).__init__(sid, gid, value)
+
         self.fr = fr
         self.to = to
         self.curve = curve

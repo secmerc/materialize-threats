@@ -15,10 +15,12 @@ DEFAULT_FILL = "#ffffff"
 
 ARRAY = "Array"
 CELL = "mxCell"
+USER_OBJECT = "UserObject"
 GEO = "mxGeometry"
 GRAPH = "mxGraphModel"
 POINT = "mxPoint"
 ROOT = "root"
+DIAGRAM = "diagram"
 
 CURVE_INTERVALS = [0.25, 0.5, 0.75]
 

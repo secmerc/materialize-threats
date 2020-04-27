@@ -22,6 +22,18 @@ class MxGraph:
     def add_edge(self, edge):
         source, target = self.get_edge_source_target(edge)
         style = self.get_edge_style(edge, source, target)
+
+        edge_element = ET.SubElement(
+            self.root,
+            MxConst.USER_OBJECT,
+            id=edge.sid,
+            style=style,
+            parent="1",
+            edge="1",
+            source=source.sid,
+            target=target.sid,
+        )
+
         edge_element = ET.SubElement(
             self.root,
             MxConst.CELL,

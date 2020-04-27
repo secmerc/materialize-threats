@@ -2,7 +2,6 @@ from collections import OrderedDict
 from xml.etree import ElementTree
 from graphviz2drawio.mx.EdgeFactory import EdgeFactory
 from graphviz2drawio.mx.NodeFactory import NodeFactory
-from . import SVG
 from .CoordsTranslate import CoordsTranslate
 
 

@@ -2,8 +2,10 @@ from .GraphObj import GraphObj
 
 
 class Node(GraphObj):
-    def __init__(self, sid, gid, rect, texts, fill, stroke):
-        super(Node, self).__init__(sid, gid)
+    def __init__(self, sid, gid, value, rect, texts, fill, stroke):
+
+        super(Node, self).__init__(sid, gid, value)
+
         self.rect = rect
         self.texts = texts
         self.fill = fill
