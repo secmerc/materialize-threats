@@ -4,8 +4,19 @@ class Rect:
         self.y = y
         self.width = width
         self.height = height
+        self.top = y
         self.bottom = y + height
+        self.left = x
         self.right = x + width
+
+    def is_overlapping(self, rect):
+
+        if self.top > rect.bottom or self.bottom < rect.top:
+            return False
+        if self.right < rect.left or rect.left < self.left:
+            return False
+
+        return True
 
     def x_ratio(self, search):
         if search < self.x:

@@ -1,41 +1,42 @@
 import materialize_threats.deflatedecompress as deflatedecompress
 import base64
 import sqlite3
-import materialize_threats.mx.MxUtils as MxUtils
-
-
-def drawio_to_neo4j(root, cells):
-    from materialize_threats.mx import EdgeFactory
-    from materialize_threats.mx import NodeFactory
-    from materialize_threats.mx import MxGraph
-    from materialize_threats.models.CoordsTranslate import CoordsTranslate
-    from collections import OrderedDict
-
-
-    #import pdb; pdb.set_trace()
-    edgefactory = EdgeFactory.EdgeFactory()
-    nodefactory = NodeFactory.NodeFactory()
-    edges = []
-    nodes = OrderedDict()
-
-    for cell in cells:
-        #if cell.get('id') == str(0) or cell.get('id') == str(1):
-        #    continue
-        if cell.get('edge') == str(1):
-            edges.append(edgefactory.from_xml(cell))
-        else:
-            #import pdb; pdb.set_trace()
-            nodes[cell.get('id')] = nodefactory.from_xml(cell)
-
-
-    mxgraph = MxGraph.MxGraph(nodes=nodes, edges=edges)
-    import pdb; pdb.set_trace()
-
-
-    pass
+import materialize_threats.utils.MxUtils as MxUtils
 
 def main():
-    MxUtils.parse_xml()
+    graph = MxUtils.parse_from_xml(filename="materialize_threats/samples/sample.drawio")
+
+    #find orphaned nodes
+    nodes = set(graph.nodes.keys())
+    edges = set()
+    
+    for edge in graph.edges:
+        edges.add(edge.to)
+        edges.add(edge.fr)
+
+    orphans = nodes.difference(edges)
+    nodes = nodes.difference(orphans)
+    
+    # current overlap check can only detect comparing the larger rectangle to the smaller one inside.
+    # it cannot take the smaller inner rectangle and detect that its wrapped in an outer rectangle
+    # TODO: would it be better to rename this function to something like contains_rectangle()?
+
+    # For now, orphans are assumed to be the smaller inner objects
+    for node in nodes:
+        outer_node = graph.get_node_by_sid(node)
+
+        for orphan in orphans: 
+            orphan = graph.get_node_by_sid(orphan)
+            if outer_node.rect.is_overlapping(orphan.rect):
+                import pdb; pdb.set_trace()
+                print("found {} inside {}".format(orphan.sid, outer_node.sid))
+
+
+    
+
+    
+    #find out if they intersect any of our nodes
+    #if they do, flatten the orphans into node.value
 
 if __name__ == "__main__":
     main()

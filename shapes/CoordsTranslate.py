@@ -14,11 +14,3 @@ class CoordsTranslate:
         x = xml.get('dx')
         y = xml.get('dy')
         return CoordsTranslate(x=float(x), y=float(y))
-
-"""
-    @staticmethod
-    def from_svg_transform(transform):
-        x, y = transform.split("translate(")[1].split(")")[0].split(" ")
-        return CoordsTranslate(x=float(x), y=float(y))
-"""
-

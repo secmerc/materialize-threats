@@ -1,6 +1,7 @@
 import xml.etree.ElementTree, io, base64, urllib.parse, collections
 
-from . import MxConst, EdgeFactory, NodeFactory, MxGraph
+from ..models import EdgeFactory, NodeFactory, MxGraph
+from ..utils import MxConst
 from .. import deflatedecompress
 
 def decode_cell(cell):
@@ -17,7 +18,7 @@ def decode_cell(cell):
     return cell, value
 
 def get_mxgraph_from_xml(root, cells):
-    from materialize_threats.models.CoordsTranslate import CoordsTranslate
+    from materialize_threats.shapes.CoordsTranslate import CoordsTranslate
     from collections import OrderedDict
 
     coords = CoordsTranslate.from_xml_transform(root)
@@ -39,7 +40,7 @@ def get_mxgraph_from_xml(root, cells):
         else:
             nodes[cell.get('id')] = nodefactory.from_xml(cell, value)
 
-    mxgraph = MxGraph.MxGraph(nodes=nodes, edges=edges)
+    return(MxGraph.MxGraph(nodes=nodes, edges=edges))
 
 
 def decompress_diagram_to_file(compressed_diagram):
@@ -61,9 +62,9 @@ def decompress_diagram_to_file(compressed_diagram):
         )
     )
 
-def parse_xml():
+def parse_from_xml(filename):
 
-    tree = xml.etree.ElementTree.parse("materialize_threats/samples/sample.drawio")
+    tree = xml.etree.ElementTree.parse(filename)
     root = tree.getroot()
 
     diagram = root.find(MxConst.DIAGRAM)

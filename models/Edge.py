@@ -1,4 +1,4 @@
-from materialize_threats.models import DotAttr
+from materialize_threats.utils import MxConst
 from .GraphObj import GraphObj
 
 
@@ -15,7 +15,7 @@ class Edge(GraphObj):
         self.arrowtail = None
 
     def curve_start_end(self):
-        if self.dir == DotAttr.BACK:
+        if self.dir == MxConst.BACK:
             return self.curve.end, self.curve.start
         else:
             return self.curve.start, self.curve.end

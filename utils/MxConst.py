@@ -1,4 +1,11 @@
 DECLARATION = '<?xml version="1.0"?>'
+BACK = "back"
+NO_FILL = "o"
+
+SOLID = "solid"
+DASHED = "dashed"
+
+MIDDLE = "middle"
 
 BLOCK = "block"
 DIAMOND = "diamond"

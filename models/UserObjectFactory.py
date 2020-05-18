@@ -1,4 +1,3 @@
-#from graphviz2drawio.models import SVG
 from .CurveFactory import CurveFactory
 from .Edge import Edge
 
@@ -8,11 +7,10 @@ class EdgeFactory:
         super(EdgeFactory, self).__init__()
         self.curve_factory = CurveFactory(coords)
 
-    def from_xml(self, xml, value):
+    def from_xml(self, xml):
         return Edge(
             sid=xml.get('id'),
             gid=xml.get('parent'),
-            value=value,
             fr=xml.get('source'),
             to=xml.get('target'),
             curve=self.curve_factory.from_xml(xml)

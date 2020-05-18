@@ -1,8 +1,8 @@
 from xml.etree import ElementTree as ET
 
-from materialize_threats.models import DotAttr
-from . import MxConst
-from ..mx.Styles import Styles
+from materialize_threats.utils import MxConst
+from ..utils import MxConst
+from .Styles import Styles
 
 
 class MxGraph:
@@ -25,17 +25,6 @@ class MxGraph:
 
         edge_element = ET.SubElement(
             self.root,
-            MxConst.USER_OBJECT,
-            id=edge.sid,
-            style=style,
-            parent="1",
-            edge="1",
-            source=source.sid,
-            target=target.sid,
-        )
-
-        edge_element = ET.SubElement(
-            self.root,
             MxConst.CELL,
             id=edge.sid,
             style=style,
@@ -49,8 +38,15 @@ class MxGraph:
         else:
             self.add_mx_geo_with_points(edge_element, edge.curve)
 
+    def get_edge_by_sid(self, sid):
+        for edge in self.edges:
+            if edge.sid == sid:
+                return edge
+        
+        return None
+
     def get_edge_source_target(self, edge):
-        if edge.dir == DotAttr.BACK:
+        if edge.dir == MxConst.BACK:
             return self.nodes[edge.to], self.nodes[edge.fr]
         else:
             return self.nodes[edge.fr], self.nodes[edge.to]
@@ -58,13 +54,13 @@ class MxGraph:
     def get_edge_style(self, edge, source_node, target_node):
         end_arrow = MxConst.BLOCK
         end_fill = 1
-        dashed = 1 if edge.style == DotAttr.DASHED else 0
+        dashed = 1 if edge.style == MxConst.DASHED else 0
         if edge.arrowtail is not None:
             tail = edge.arrowtail
-            if edge.arrowtail[0] == DotAttr.NO_FILL:
+            if edge.arrowtail[0] == MxConst.NO_FILL:
                 end_fill = 0
                 tail = edge.arrowtail[1:]
-            if tail == DotAttr.DIAMOND:
+            if tail == MxConst.DIAMOND:
                 end_arrow = MxConst.DIAMOND
 
         start_curve, end_curve = edge.curve_start_end()
@@ -103,6 +99,12 @@ class MxGraph:
             vertex="1",
         )
         self.add_mx_geo(node_element, node.rect)
+
+    def get_node_by_sid(self, sid):
+        try:
+            return self.nodes[sid]
+        except KeyError:
+            return None
 
     @staticmethod
     def add_mx_geo(element, rect=None):
