@@ -7,6 +7,23 @@ class GraphObj(ABC):
         self.gid = gid
         self.value = value
     
+    def get_user_object(self):
+        uo_type = self.value.get('type')
+        assert(
+            (uo_type == 'trust zone') or
+            (uo_type == 'process') or
+            (uo_type == 'entity') or
+            (uo_type == 'data store')
+        )
+
+
+    def set_user_nvpair(self, name, value):
+        return self.value.set(name, value)
+
+    def get_user_nvpair(self, name):
+        return self.value.get(name)
+
+
     def enrich_from_graph(self, attrs):
         for e in attrs:
             self.__setattr__(e[0], e[1])

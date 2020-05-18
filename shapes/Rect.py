@@ -9,11 +9,13 @@ class Rect:
         self.left = x
         self.right = x + width
 
-    def is_overlapping(self, rect):
+    def is_overlapping(self, inner):
 
-        if self.top > rect.bottom or self.bottom < rect.top:
+        # TODO: make this handle any overlap case, inner or outer
+        
+        if self.top > inner.bottom or self.bottom < inner.top:
             return False
-        if self.right < rect.left or rect.left < self.left:
+        if self.right < inner.left or inner.left < self.left:
             return False
 
         return True

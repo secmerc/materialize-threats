@@ -6,6 +6,7 @@ class UserObject(GraphObj):
         super(UserObject, self).__init__(sid, gid)
         data = **kwargs
 
+
     def text_to_mx_value(self):
         value = ""
         last_text = len(self.texts) - 1
@@ -15,3 +16,12 @@ class UserObject(GraphObj):
             if i != last_text:
                 value += "<hr size='1'/>"
         return value
+
+class ZoneObject(UserObject):
+    def __init__(self, sid, gid, **kwargs):
+        super(ZoneObject, self).__init__(sid, gid)
+        data = **kwargs
+    
+    def get_trust_zone(self):
+        pass
+
