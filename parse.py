@@ -17,12 +17,9 @@ def main():
     orphans = nodes.difference(edges)
     nodes = nodes.difference(orphans)
     
-    # current overlap check can only detect comparing the larger rectangle to the smaller one inside.
-    # it cannot take the smaller inner rectangle and detect that its wrapped in an outer rectangle
    
     # TODO: would it be better to rename this function to something like contains_rectangle()?
     # TODO: extend mx library with userobject concept, being loading our metadata into the parsed objects
-
 
     # For now, orphans are assumed to be the smaller inner objects
     for node in nodes:
@@ -30,17 +27,17 @@ def main():
 
         for orphan in orphans: 
             orphan = graph.get_node_by_sid(orphan)
-            assert(orphan.value.get('type') == 'trust zone')
+            assert(orphan.value.xml.get('type') == 'trust zone')
         
             outer_rect = node.rect
             inner_rect = orphan.rect
             
             if outer_rect.is_overlapping(inner_rect):
                 import pdb; pdb.set_trace()
-                print("found {} inside {}".format(orphan.sid, node.sid))
+                print("found {} {} inside {} {}".format(orphan.label, orphan.sid, node.label, node.sid))
                 
-                node.set_user_nvpair("zone", orphan.get_user_nvpair("label"))
-                print(node.get_user_nvpair("zone"))
+                node.value.set_user_nvpair("zone", orphan.value.get_user_nvpair("label"))
+                print(node.value.get_user_nvpair("zone"))
 
 if __name__ == "__main__":
     main()

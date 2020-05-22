@@ -39,14 +39,3 @@ class Text:
             size=MxConst.DEFAULT_TEXT_SIZE,
             color=None,
         )
-
-    @staticmethod
-    def from_svg(t):
-        import pdb; pdb.set_trace()
-        return Text(
-            text=t.text.replace("<", "&lt;").replace(">", "&gt;"),
-            anchor=t.attrib.get("text-anchor", None),
-            family=t.attrib.get("font-family", MxConst.DEFAULT_FONT_FAMILY),
-            size=float(t.attrib.get("font-size", MxConst.DEFAULT_TEXT_SIZE)),
-            color=t.attrib.get("fill", None),
-        )

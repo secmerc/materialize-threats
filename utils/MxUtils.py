@@ -1,44 +1,53 @@
 import xml.etree.ElementTree, io, base64, urllib.parse, collections
 
-from ..models import EdgeFactory, NodeFactory, MxGraph
+from ..models import MxGraph
+
+from ..io.NodeFactory import NodeFactory
+from ..io.UserObjectFactory import UserObjectFactory
+from ..io.EdgeFactory import EdgeFactory
+
 from ..utils import MxConst
 from .. import deflatedecompress
 
-def decode_cell(cell):
-    value = None
+def decode_xml_element(cell):
+    userobject = None
+
+    userobjectfactory = UserObjectFactory()
 
     if cell.tag == MxConst.USER_OBJECT:
-        value = cell
-        id = value.get('id')
+        userobject = userobjectfactory.from_xml(cell)
+        id = userobject.xml.get('id')
+        label = userobject.xml.get('label')
     
-    if value is not None:
-        cell = value.find(MxConst.CELL)
+    if userobject is not None:
+        cell = userobject.xml.find(MxConst.CELL)
         cell.set('id', id)
+        cell.set('label', label)
 
-    return cell, value
+    return cell, userobject
 
-def get_mxgraph_from_xml(root, cells):
-    from materialize_threats.shapes.CoordsTranslate import CoordsTranslate
+def get_mxgraph_from_xml(root, elements):
+    from ..shapes.CoordsTranslate import CoordsTranslate
     from collections import OrderedDict
 
     coords = CoordsTranslate.from_xml_transform(root)
 
-    edgefactory = EdgeFactory.EdgeFactory(coords)
-    nodefactory = NodeFactory.NodeFactory(coords)
+    edgefactory = EdgeFactory(coords)
+    nodefactory = NodeFactory(coords)
 
     edges = []
     nodes = collections.OrderedDict()
 
-    for cell in cells:
-        if cell.get('id') == str(0) or cell.get('id') == str(1):
+    for element in elements:
+        if element.get('id') == str(0) or element.get('id') == str(1):
             continue
         
-        cell, value = decode_cell(cell)
+        cell, userobject = decode_xml_element(element)
 
         if cell.get('edge') == str(1):
-            edges.append(edgefactory.from_xml(cell, value))
+            edges.append(edgefactory.from_xml(cell, userobject))
         else:
-            nodes[cell.get('id')] = nodefactory.from_xml(cell, value)
+            nodes[cell.get('id')] = nodefactory.from_xml(cell, userobject)
 
     return(MxGraph.MxGraph(nodes=nodes, edges=edges))
 

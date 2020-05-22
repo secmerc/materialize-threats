@@ -1,7 +1,8 @@
 
-from materialize_threats.shapes.Rect import Rect
-from .Node import Node
-from .Text import Text
+from ..shapes.Rect import Rect
+from ..models.Node import Node 
+from ..models.Text import Text 
+from ..models.UserObject import UserObject 
 
 
 class NodeFactory:
@@ -12,7 +13,6 @@ class NodeFactory:
     def from_xml(self, xml, value):
         texts = []
         texts.append(Text.from_xml(xml.get('style')))
-    
         return Node(
             sid=xml.get('id'),
             gid=xml.get('parent'),
@@ -23,6 +23,7 @@ class NodeFactory:
                 width=int(xml.find('mxGeometry').get('width')),
                 height=int(xml.find('mxGeometry').get('height'))
             ),
+            label=xml.get('label'),
             texts=texts,
             fill=None,
             stroke=None

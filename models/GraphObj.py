@@ -17,12 +17,6 @@ class GraphObj(ABC):
         )
 
 
-    def set_user_nvpair(self, name, value):
-        return self.value.set(name, value)
-
-    def get_user_nvpair(self, name):
-        return self.value.get(name)
-
 
     def enrich_from_graph(self, attrs):
         for e in attrs:

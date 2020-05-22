@@ -12,10 +12,16 @@ class Rect:
     def is_overlapping(self, inner):
 
         # TODO: make this handle any overlap case, inner or outer
-        
+        """      X
+         0 1 2 3 4 
+        -1    -----  <-- top
+        -2    |   |
+        -3    |   | <-- right
+      Y -4    ----- <-- bottom
+        """
         if self.top > inner.bottom or self.bottom < inner.top:
             return False
-        if self.right < inner.left or inner.left < self.left:
+        if self.right < inner.left or self.left > inner.left:
             return False
 
         return True

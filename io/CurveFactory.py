@@ -1,6 +1,4 @@
-#from svg.path import CubicBezier
-#from svg.path import parse_path
-from .Curve import Curve
+from ..models.Curve import Curve
 
 
 class CurveFactory:

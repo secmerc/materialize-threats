@@ -1,6 +1,9 @@
 # Todo
 [ x ] Introduce higher level mxcell concept, then handle user objects which wrap mxcells. We want to continue the 'value' design by stripping the user object off of the outside of the mxcell, then embedding it as the mxcell.value
-[ ] Fix up the factories to handle the gid, sid being in the user object, not the mxcell
+[ x ] Fix up the factories to handle the gid, sid being in the user object, not the mxcell
+[ X ] Implement UserObject and UserObjectFactory
+[ ] Move geometry to shapely
+[ ] Add convenience functions to edges for directionality
 
 # Running
 `python3 -m materialize_threats.parse`
