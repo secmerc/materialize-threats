@@ -9,7 +9,7 @@
 
 # Cloning & Running
 ```
-git clone git@github.com:jacob-salassi/materialize_threats.git
+git clone git@github.com:secmerc/materialize_threats.git
 python3 -m materialize_threats.parse
 ```
 
