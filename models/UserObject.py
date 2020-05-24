@@ -23,10 +23,9 @@ class UserObject(GraphObj):
         return self.xml.get(name)
 
 class ZoneObject(UserObject):
-    def __init__(self, sid, gid, **kwargs):
-        super(ZoneObject, self).__init__(sid, gid)
-        #data = **kwargs
+    def __init__(self, xml, label):
+        super(ZoneObject, self).__init__(xml, label)
     
     def get_trust_zone(self):
-        pass
+        return self.xml.get('label')
 

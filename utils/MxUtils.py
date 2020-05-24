@@ -16,6 +16,7 @@ def decode_xml_element(cell):
 
     if cell.tag == MxConst.USER_OBJECT:
         userobject = userobjectfactory.from_xml(cell)
+        
         id = userobject.xml.get('id')
         label = userobject.xml.get('label')
     
