@@ -2,6 +2,14 @@ from .GraphObj import GraphObj
 
 
 class UserObject(GraphObj):
+    ZONE = 'zone'
+    ZONE_PREFIX = 'z'
+    ZONE_INDEX = 1
+
+    TYPE = 'type'
+    LABEL = 'label'
+
+
     def __init__(self, xml, label, sid=None, gid=None, value=None):
         super(UserObject, self).__init__(sid, gid, value)
         self.xml = xml
@@ -15,17 +23,22 @@ class UserObject(GraphObj):
             if i != last_text:
                 value += "<hr size='1'/>"
         return value
+    
+    def get_trust_zone(self):
+        zone = self.xml.get(self.ZONE)  
+        return zone
+    
+    def set_trust_zone(self, zone):
+        return self.xml.set(self.ZONE, zone)
 
-    def set_user_nvpair(self, name, value):
-        return self.xml.set(name, value)
-
-    def get_user_nvpair(self, name):
-        return self.xml.get(name)
+    def get_object_type(self):
+        return self.xml.get(self.TYPE)
 
 class ZoneObject(UserObject):
     def __init__(self, xml, label):
         super(ZoneObject, self).__init__(xml, label)
     
     def get_trust_zone(self):
-        return self.xml.get('label')
+        zone = self.xml.get(self.LABEL)
+        return zone.lower().split(self.ZONE_PREFIX)[self.ZONE_INDEX]
 

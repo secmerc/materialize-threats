@@ -3,15 +3,13 @@ import base64
 import sqlite3
 import materialize_threats.utils.MxUtils as MxUtils
 
-def main():
-    graph = MxUtils.parse_from_xml(filename="materialize_threats/samples/sample.drawio")
-
+def enrich_graph_from_zone_annotations(graph):
     nodes = set(graph.nodes.keys())    
     edges = set()
     for edge in graph.edges:
         edges.add(edge.to)
         edges.add(edge.fr)
-    
+
     orphans = nodes.difference(edges)
     nodes = nodes.difference(orphans)
     
@@ -21,16 +19,52 @@ def main():
 
         for orphan in orphans: 
             orphan = graph.get_node_by_sid(orphan)
-            assert(orphan.value.xml.get('type') == 'trust zone')
+            
+            assert(orphan.value.get_object_type() == 'trust zone')
         
             outer_rect = node.rect
             inner_rect = orphan.rect
             
             if outer_rect.is_overlapping(inner_rect):
-                print("found {} {} inside {} {}".format(orphan.label, orphan.sid, node.label, node.sid))
-                
-                node.value.set_user_nvpair("zone", orphan.value.get_user_nvpair("label"))
-                print(orphan.value.get_trust_zone())
+                print("found {} {} inside {} {}".format(orphan.value.get_trust_zone(), orphan.sid, node.label, node.sid))
+                node.value.set_trust_zone(
+                    orphan.value.get_trust_zone()
+                )
+                print("Set {} on {} {}".format(node.value.get_trust_zone(), node.label, node.sid))
+    
+    return orphans
+
+def analyze_graph_flows_for_threats(graph):
+    
+    flows = graph.edges.copy()
+    
+    threats = dict()
+
+    for flow in flows:
+
+        source = graph.nodes[flow.fr]
+        source_zone = int(source.value.get_trust_zone())
+        
+        destination = graph.nodes[flow.to]
+        destination_zone = int(destination.value.get_trust_zone())
+
+        if not destination in threats:
+            threats[destination] = list()
+        if not source in threats:
+            threats[source] = list()
+    
+        if source_zone == 0 and destination_zone >= 1:                
+            print("{} recieves D from {}".format(destination.label, source.label))
+            threats[destination].append("D")    
+
+
+def main():
+    graph = MxUtils.parse_from_xml(filename="materialize_threats/samples/sample.drawio")
+
+    enrich_graph_from_zone_annotations(graph)
+    threats = analyze_graph_flows_for_threats(graph)
+
+    
 
 if __name__ == "__main__":
     main()
