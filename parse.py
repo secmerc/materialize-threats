@@ -35,57 +35,6 @@ def enrich_graph_from_zone_annotations(graph):
     return orphans
 
 def load_graph_into_db(graph):
-    '''
-    my current idea is to store processes as
-    metdata on edges. 
-
-    A flow can consist of nodes x,y so long as neither 
-    x or y are processes.
-
-    node -> process -> node
-    
-    becomes
-
-    node -[process]-> node
-
-    This means we are implicitly deleting two edges and
-    replacing it with a single edge with attached metadata.
-
-    Now this is interesting because you can have a many to
-    may relationship 
-
-        /----> process0 --> \
-    node ----> process1 -->  node
-        \----> process2 --> /
-
-
-                process0 --> \
-    node ----> process1 -->  node
-
-
-        this means that when its a process, we need to 
-        simply replace the source.to with process.to and
-        store the process object on the edge
-
-    assumptions:
-        * processes exist on a single flow
-        * no process will participate in multiple flows
-        * a process is not mandatory on every flow
-
-        to replace it:
-
-        1. fetch the edge whose edge.fr is process.sid
-        2. fetch the node at edge.to
-        3. replace destination with edge.to
-
-        problems
-        - we are inside a for loop that iterates over flows,
-        so its somewhat problematic to look up and switch context
-        to another flow???
-
-    '''
-
-
     flows = graph.edges.copy()
 
     for flow in flows:
@@ -94,6 +43,7 @@ def load_graph_into_db(graph):
 
         source = graph.nodes[flow.fr]
         destination = graph.nodes[flow.to]
+        
         process = None
         
         pair = []
