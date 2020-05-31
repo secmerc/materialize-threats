@@ -92,29 +92,88 @@ def load_graph_into_db(graph):
     return True
 
 def get_flows_with_threats(graph):
-     
-    # Select all edges who recieve data from nodes in a trust zone of 0
-    dos_flows = (
-        Edge.select()
-        .join(Node, on=(Edge.source == Node.id))
-        .where(Edge.source.zone == 0)
+    threats = { 
+        'spoofing': [],
+        'tampering': [],
+        'repudiation': [],
+        'info_disclosure': [],
+        'denial_of_service': [],
+        'elevation_of_privilege': []
+    }
+
+    Source = Node.alias()
+    Destination = Node.alias()
+
+
+    threats['elevation_of_privilege'] = (
+        Edge.select(Edge, Source.zone, Destination.zone)
+        .join(Source, on=(Source.id == Edge.source))
+        .switch(Destination)
+        .join(Destination, on=(Destination.id == Edge.destination))
+        .where(
+            (Source.zone < Destination.zone)
+        )
     )
-    
-    return dos_flows
+
+    threats['spoofing'] = (
+        Edge.select(Edge, Source.zone, Destination.zone)
+        .join(Source, on=(Source.id == Edge.source))
+        .switch(Destination)
+        .join(Destination, on=(Destination.id == Edge.destination))
+        .where(
+            (Source.zone == 0) & 
+            (Destination.zone == 1)
+        )
+    )
+
+    threats['tampering'] = (
+        Edge.select(Edge, Source.zone, Destination.zone)
+        .join(Source, on=(Source.id == Edge.source))
+        .switch(Destination)
+        .join(Destination, on=(Destination.id == Edge.destination))
+        .where(
+            (Source.zone < Destination.zone)
+        )
+    )
+
+    #repudiation
+    threats['repudation'] = set(threats['spoofing']).intersection(set(threats['tampering']))
+
+
+    threats['denial_of_service'] = (
+        Edge.select(Edge, Source.zone, Destination.zone)
+        .join(Source, on=(Source.id == Edge.source))
+        .switch(Destination)
+        .join(Destination, on=(Destination.id == Edge.destination))
+        .where(
+            (Source.zone == 0) & 
+            (Destination.zone == 1)
+        )
+    )
+
+    threats['information_disclosure'] = (
+        Edge.select(Edge, Source.zone, Destination.zone)
+        .join(Source, on=(Source.id == Edge.source))
+        .switch(Destination)
+        .join(Destination, on=(Destination.id == Edge.destination))
+        .where(
+            (Source.zone > Destination.zone)
+        )
+    )
+    return threats
 
 def main():
     graph = MxUtils.parse_from_xml(filename="materialize_threats/samples/sample.drawio")
-
     enrich_graph_from_zone_annotations(graph)
     load_graph_into_db(graph)
 
-    
     threats = get_flows_with_threats(graph)
-    for threat in threats:
-        print("You have DoS threats from {} to {} caused by {}".format(threat.source.label, threat.destination.label, threat.process.label))
-    #store_graph_and_threats(graph, threats)
-
     
+
+    for threat_class in threats.keys():
+        if len(threat_class) >= 1:
+            for threat in threats[threat_class]:
+                print("You have {} threats from {} to {} caused by {}".format(threat_class, threat.source.label, threat.destination.label, threat.process.label))
 
 if __name__ == "__main__":
     main()

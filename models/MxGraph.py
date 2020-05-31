@@ -63,19 +63,22 @@ class MxGraph:
             if tail == MxConst.DIAMOND:
                 end_arrow = MxConst.DIAMOND
 
-        start_curve, end_curve = edge.curve_start_end()
 
-        style = Styles.EDGE.format(
-            entry_x=target_node.rect.x_ratio(end_curve.real),
-            entry_y=target_node.rect.y_ratio(end_curve.imag),
-            exit_x=source_node.rect.x_ratio(start_curve.real),
-            exit_y=source_node.rect.y_ratio(start_curve.imag),
-            end_arrow=end_arrow,
-            dashed=dashed,
-            end_fill=end_fill,
-        )
+
         if edge.curve.cb is not None:
             style = "edgeStyle=orthogonalEdgeStyle;curved=1;" + style
+        else:
+            start_curve, end_curve = edge.curve_start_end()
+
+            style = Styles.EDGE.format(
+                entry_x=target_node.rect.x_ratio(end_curve.real),
+                entry_y=target_node.rect.y_ratio(end_curve.imag),
+                exit_x=source_node.rect.x_ratio(start_curve.real),
+                exit_y=source_node.rect.y_ratio(start_curve.imag),
+                end_arrow=end_arrow,
+                dashed=dashed,
+                end_fill=end_fill,
+            )
 
         return style
 
