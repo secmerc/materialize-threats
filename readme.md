@@ -33,7 +33,7 @@ It's magic.
 # Who is this for?
 Developers and security practitioners who want to perform graph analysis on data flow diagrams - using SQL. 
 
-The use case for this analysis implemented by materialize_threats determines STRIDE threats impacting specific flows and elements based on trust zone and flow direction.
+The analysis implemented by materialize_threats determines STRIDE threats impacting specific flows and elements based on trust zone and flow direction by following the Rapid Threat Model Prototyping methodology.
 
 # What's in the box?
 * Draw.io shape library (dfd-materialize.xml)
@@ -41,7 +41,6 @@ The use case for this analysis implemented by materialize_threats determines STR
 * materialize_threats python module
     * Parse supported .drawio file into graph representation (nodes, edges) stored in sqlite
     * SQL (ORM) implementation of Rapid Threat Model Prototyping methodology
-
 
 # Using
 ## 1. Creating the diagram
