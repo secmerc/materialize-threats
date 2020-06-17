@@ -5,7 +5,7 @@ Developers or security practitioners who want to perform graph analysis on data 
 * Draw.io shape library (dfd-materialize.xml)
     * Create diagrams supported for analysis
 * materialize_threats python module
-    * Parse .drawio file into graph representation (nodes, edges) stored in sqlite
+    * Parse supported .drawio file into graph representation (nodes, edges) stored in sqlite
     * SQL (ORM) implementation of Rapid Threat Model Prototyping methodology
 
 
