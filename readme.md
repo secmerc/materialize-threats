@@ -1,3 +1,35 @@
+```
+                              '             .           .
+                           o       '   o  .     '   . O
+                        '   .   ' .   _____  '    .      .
+                         .     .   .mMMMMMMMm.  '  o  '   .
+                       '   .     .MMXXXXXXXXXMM.    .   ' 
+                      .       . /XX77:::::::77XX\ .   .   .
+                         o  .  ;X7:::''''''':::7X;   .  '
+                        '    . |::'.:'        '::| .   .  .
+                           .   ;:.:.            :;. o   .
+                        '     . \'.:            /.    '   .
+                           .     `.':.        .'.  '    .
+                         '   . '  .`-._____.-'   .  . '  .
+                          ' o   '  .   O   .   '  o    '
+                           . ' .  ' . '  ' O   . '  '   '
+                            . .   '    '  .  '   . '  '
+                             . .'..' . ' ' . . '.  . '
+                              `.':.'        ':'.'.'
+                                `\\_  |     _//'
+                                  \(  |\    )/
+                                  //\ |_\  /\\
+                                 (/ /\(" )/\ \)
+                                  \/\ (  ) /\/
+                                     |(  )|
+                                     | \( \
+                                     |  )  \
+                                     |      \
+                                     |       \
+                                     |        `.__,
+                                     \_________.-'
+It's magic.
+```
 # Who is this for?
 Developers or security practitioners who want to perform graph analysis on data flow diagrams. The primary use case for this analysis is to recieve hints on which STRIDE threats impact which areas of the design.
 
