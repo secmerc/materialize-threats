@@ -31,7 +31,9 @@
 It's magic.
 ```
 # Who is this for?
-Developers or security practitioners who want to perform graph analysis on data flow diagrams. The primary use case for this analysis is to recieve hints on which STRIDE threats impact which areas of the design.
+Developers or security practitioners who want to perform graph analysis on data flow diagrams using SQL. 
+
+The use case for this analysis implemented by materialize_threats is to determine which STRIDE threats impact which flows and elements.
 
 # What's in the box?
 * Draw.io shape library (dfd-materialize.xml)
