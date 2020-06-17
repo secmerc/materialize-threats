@@ -18,18 +18,18 @@ Developers or security practitioners who want to perform graph analysis on data 
 ## 2. Enumerating threats
 ```
 git clone git@github.com:secmerc/materialize_threats.git
-python3 -m materialize_threats/materialize.py --filename=/path/to/diagram.drawio
+python3 materialize_threats/materialize.py --filename=/path/to/diagram.drawio
 ```
 
 # Sample data
 Default to sample
 ```
-python3 -m materialize_threats/materialize.py
+python3 materialize_threats/materialize.py
 ```
 
 Specify alternate sample
 ```
-python3 -m materialize_threats/materialize.py --filename=samples/sample.drawio
+python3 materialize_threats/materialize.py --filename=samples/sample.drawio
 ```
 
 # Resources for Mxgraph
