@@ -1,7 +1,8 @@
-import materialize_threats.deflatedecompress as deflatedecompress
-import base64
-import materialize_threats.utils.MxUtils as MxUtils
-from .db import db, Node, Edge
+import base64, json, peewee, argparse, os
+from materialize_threats.db import db, Node, Edge
+from materialize_threats.utils import MxUtils
+
+
 
 def enrich_graph_from_zone_annotations(graph):
     nodes = set(graph.nodes.keys())    
@@ -59,6 +60,14 @@ def load_graph_into_db(graph):
                     type=node.value.get_object_type()
                 )
 
+                """
+                before fixup:
+                [entity]--->(process)--->[entity]
+                
+                after fixup:
+                [entity]--_-->[entity]
+                          ^ (process stored as metadata)
+                """
                 if node == source:
                     # fix up the source
                     candidates = [flow.fr for flow in flows if flow.to == node.sid]
@@ -92,88 +101,104 @@ def load_graph_into_db(graph):
     return True
 
 def get_flows_with_threats(graph):
+
+    SPOOFING = 'spoofing'
+    TAMPERING = 'tampering'
+    REPUDIATION = 'repudiation'
+    INFORMATION_DISCLOSURE = 'informationDisclosure'
+    DENIAL_OF_SERVICE = 'denialOfService'
+    ELEVATION_OF_PRIVILEGE = 'elevationOfPrivilege'
+
+    SOURCE = 'source'
+    SOURCE_ZONE = 'sourceZone'
+    DESTINATION = 'destination'
+    DESTINATION_ZONE =  'destinationZone'
+    PROCESS = 'process'
+
     threats = { 
-        'spoofing': [],
-        'tampering': [],
-        'repudiation': [],
-        'info_disclosure': [],
-        'denial_of_service': [],
-        'elevation_of_privilege': []
+        SPOOFING: [],
+        TAMPERING: [],
+        REPUDIATION: [],
+        INFORMATION_DISCLOSURE: [],
+        DENIAL_OF_SERVICE: [],
+        ELEVATION_OF_PRIVILEGE: []
     }
 
     Source = Node.alias()
     Destination = Node.alias()
+    Process = Node.alias()
 
-
-    threats['elevation_of_privilege'] = (
-        Edge.select(Edge, Source.zone, Destination.zone)
+    edgequery = (
+        Edge.select(
+            Source.label.alias(SOURCE), 
+            Source.zone.alias(SOURCE_ZONE),
+            Destination.label.alias(DESTINATION), 
+            Destination.zone.alias(DESTINATION_ZONE),
+            Process.label.alias(PROCESS)
+        )
         .join(Source, on=(Source.id == Edge.source))
+        .switch(Process)
+        .join(Process, on=(Process.id == Edge.process))
         .switch(Destination)
         .join(Destination, on=(Destination.id == Edge.destination))
-        .where(
+    ) 
+
+    threats[ELEVATION_OF_PRIVILEGE] = list(
+        edgequery.where(
             (Source.zone < Destination.zone)
-        )
+        ).dicts()
     )
 
-    threats['spoofing'] = (
-        Edge.select(Edge, Source.zone, Destination.zone)
-        .join(Source, on=(Source.id == Edge.source))
-        .switch(Destination)
-        .join(Destination, on=(Destination.id == Edge.destination))
-        .where(
+    threats[SPOOFING] = list(
+       edgequery.where(
             (Source.zone == 0) & 
             (Destination.zone == 1)
-        )
+        ).dicts()
     )
 
-    threats['tampering'] = (
-        Edge.select(Edge, Source.zone, Destination.zone)
-        .join(Source, on=(Source.id == Edge.source))
-        .switch(Destination)
-        .join(Destination, on=(Destination.id == Edge.destination))
-        .where(
+    threats[TAMPERING] = list(
+        edgequery.where(
             (Source.zone < Destination.zone)
-        )
+        ).dicts()
     )
 
-    #repudiation
-    threats['repudation'] = set(threats['spoofing']).intersection(set(threats['tampering']))
+    threats[REPUDIATION] = [threat for threat in threats[SPOOFING] if threat in threats[TAMPERING]]
 
-
-    threats['denial_of_service'] = (
-        Edge.select(Edge, Source.zone, Destination.zone)
-        .join(Source, on=(Source.id == Edge.source))
-        .switch(Destination)
-        .join(Destination, on=(Destination.id == Edge.destination))
-        .where(
+    threats[DENIAL_OF_SERVICE] = list(
+        edgequery.where(
             (Source.zone == 0) & 
             (Destination.zone == 1)
-        )
+        ).dicts()
     )
 
-    threats['information_disclosure'] = (
-        Edge.select(Edge, Source.zone, Destination.zone)
-        .join(Source, on=(Source.id == Edge.source))
-        .switch(Destination)
-        .join(Destination, on=(Destination.id == Edge.destination))
-        .where(
+    threats[INFORMATION_DISCLOSURE] = list(
+        edgequery.where(
             (Source.zone > Destination.zone)
-        )
+        ).dicts()
     )
+
     return threats
 
+def output_threats(threats):
+    print(
+        json.dumps(threats, indent=4)
+    )
+
 def main():
-    graph = MxUtils.parse_from_xml(filename="materialize_threats/samples/sample.drawio")
+
+    args = argparse.ArgumentParser(description="Enumerate STRIDE threats from a data flow diagram")
+    args.add_argument(
+        "--filename", 
+        default="samples/sample.drawio",
+        type=argparse.FileType('r'), 
+        help="The draw.io filename containing the data flow diagram")
+
+    graph = MxUtils.parse_from_xml(filename=args.parse_args().filename)
     enrich_graph_from_zone_annotations(graph)
     load_graph_into_db(graph)
 
     threats = get_flows_with_threats(graph)
-    
-
-    for threat_class in threats.keys():
-        if len(threat_class) >= 1:
-            for threat in threats[threat_class]:
-                print("You have {} threats from {} to {} caused by {}".format(threat_class, threat.source.label, threat.destination.label, threat.process.label))
+    output_threats(threats)
 
 if __name__ == "__main__":
     main()

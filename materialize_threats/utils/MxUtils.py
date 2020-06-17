@@ -6,8 +6,8 @@ from ..io.NodeFactory import NodeFactory
 from ..io.UserObjectFactory import UserObjectFactory
 from ..io.EdgeFactory import EdgeFactory
 
-from ..utils import MxConst
-from .. import deflatedecompress
+from . import MxConst
+from . import deflatedecompress
 
 def decode_xml_element(cell):
     userobject = None

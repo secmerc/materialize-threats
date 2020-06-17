@@ -1,6 +1,6 @@
 import peewee
 
-db = peewee.SqliteDatabase("file::memory:?cache=shared")
+db = peewee.SqliteDatabase(":memory:")
     # flows, entities, processes, data store
 
 class BaseModel(peewee.Model):

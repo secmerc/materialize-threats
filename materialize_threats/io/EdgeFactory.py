@@ -16,14 +16,3 @@ class EdgeFactory:
             to=xml.get('target'),
             curve=self.curve_factory.from_xml(xml)
         )
-'''
-    def from_svg(self, g):
-        gid = SVG.get_title(g).replace("--", "->")
-        fr, to = gid.split("->")
-        curve = None
-        if SVG.has(g, "path"):
-            path = SVG.get_first(g, "path")
-            if "d" in path.attrib:
-                curve = self.curve_factory.from_svg(path.attrib["d"])
-        return Edge(sid=g.attrib["id"], gid=gid, fr=fr, to=to, curve=curve)
-'''

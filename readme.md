@@ -1,27 +1,41 @@
-# Todo
-- as much as possible, the objects we use should be wrappers around XML - this means that everyone has self.xml, and all setters/getters abstract xml shit
-- once thats the case, storing new metadata onto the xml is pointless - we need to store the metadata wherever it will be useful to the threat analysis framework. as a result, 
-- [ ] we should start loading things into neo4j now and do a PoC for STRIDE against the diagram.
+# Who is this for?
+Developers or security practitioners who want to perform graph analysis on data flow diagrams. The primary use case for this analysis is to recieve hints on which STRIDE threats impact which areas of the design.
+
+# What's in the box?
+* Draw.io shape library (dfd-materialize.xml)
+    * Create diagrams supported for analysis
+* materialize_threats python module
+    * Parse .drawio file into graph representation (nodes, edges) stored in sqlite
+    * SQL (ORM) implementation of Rapid Threat Model Prototyping methodology
 
 
+# Using
+## 1. Creating the diagram
+* Use draw.io to import the dfd-materialize.xml shape library
+* Create a data flow diagram using the shapes
+* Save it as a .drawio file in a convenient location
 
-- [x] Introduce higher level mxcell concept, then handle user objects which wrap mxcells. We want to continue the 'value' design by stripping the user object off of the outside of the mxcell, then embedding it as the mxcell.value
-- [x] Fix up the factories to handle the gid, sid being in the user object, not the mxcell
-- [x] Implement UserObject and UserObjectFactory
-- [x] Now that we have orphan zone objects, how do we update the entity it belongs to?
-- [x] Determine where/how we'll power graph analysis, is neo4j overkill?
-- [ ] Move geometry to shapely
-- [ ] ~~Add convenience functions to edges for directionality~~
-- [ ] store the element type so we can skip over processes during threat detection
-- [ ] should we pivot to json based flat storage?
-
-# Cloning & Running
+## 2. Enumerating threats
 ```
 git clone git@github.com:secmerc/materialize_threats.git
-python3 -m materialize_threats.parse
+python3 -m materialize_threats/materialize.py --filename=/path/to/diagram.drawio
 ```
 
 # Sample data
+Default to sample
 ```
-samples/sample.drawio
+python3 -m materialize_threats/materialize.py
 ```
+
+Specify alternate sample
+```
+python3 -m materialize_threats/materialize.py --filename=samples/sample.drawio
+```
+
+# Resources for Mxgraph
+* https://github.com/jgraph/mxgraph
+* https://github.com/jgraph/mxgraph/blob/7af5a44c5b2d8a4d0fc56d3eebc964c3ca8b82de/java/examples/com/mxgraph/examples/Codec.java
+* https://github.com/jgraph/mxgraph/blob/51382db43061ac4f30a87c835d17e306378b1af4/java/src/com/mxgraph/io/mxCellCodec.java
+* https://github.com/jgraph/mxgraph/blob/51382db43061ac4f30a87c835d17e306378b1af4/java/src/com/mxgraph/io/mxRootChangeCodec.java
+* https://github.com/jgraph/mxgraph/blob/51382db43061ac4f30a87c835d17e306378b1af4/java/src/com/mxgraph/model/mxCell.java
+
