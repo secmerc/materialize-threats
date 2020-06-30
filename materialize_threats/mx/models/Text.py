@@ -1,4 +1,4 @@
-from materialize_threats.utils import MxConst
+from ..utils import MxConst
 from .Styles import Styles
 
 

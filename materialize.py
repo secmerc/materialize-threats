@@ -1,8 +1,11 @@
 import base64, json, peewee, argparse, os
 from materialize_threats.db import db, Node, Edge
-from materialize_threats.utils import MxUtils
+from materialize_threats.mx.utils import MxUtils
+from materialize_threats.gherkin_stride import create_gherkins_from_threats
 
-
+"""
+https://docs.microsoft.com/en-us/archive/blogs/larryosterman/threat-modeling-again-presenting-the-playsound-threat-model
+"""
 
 def enrich_graph_from_zone_annotations(graph):
     nodes = set(graph.nodes.keys())    
@@ -198,7 +201,14 @@ def main():
     load_graph_into_db(graph)
 
     threats = get_flows_with_threats(graph)
+    gherkin_candidates = create_gherkins_from_threats(threats) 
+    
+    for gherkin in gherkin_candidates:
+        print(gherkin)
+    
+    #suggest_gherkins_for_candidates()
     output_threats(threats)
+    
 
 if __name__ == "__main__":
     main()
