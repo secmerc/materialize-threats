@@ -9,6 +9,7 @@ class UserObject(GraphObj):
     TYPE = 'type'
     LABEL = 'label'
 
+    texts = "none"
 
     def __init__(self, xml, label, sid=None, gid=None, value=None):
         super(UserObject, self).__init__(sid, gid, value)
