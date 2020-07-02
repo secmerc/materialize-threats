@@ -1,109 +1,13 @@
-import base64, json, peewee, argparse, os
-from materialize_threats.db import db, Node, Edge
+import json, argparse, os
+from materialize_threats.db import Node, Edge, dbgraph
 from materialize_threats.mx.utils import MxUtils
-from materialize_threats.gherkin_stride import create_gherkins_from_threats
+from materialize_threats.gherkin_stride import create_gherkins_from_threats, create_feature_file_for_gherkins
 
 """
 https://docs.microsoft.com/en-us/archive/blogs/larryosterman/threat-modeling-again-presenting-the-playsound-threat-model
 """
 
-def enrich_graph_from_zone_annotations(graph):
-    nodes = set(graph.nodes.keys())    
-    edges = set()
-    for edge in graph.edges:
-        edges.add(edge.to)
-        edges.add(edge.fr)
-
-    orphans = nodes.difference(edges)
-    nodes = nodes.difference(orphans)
-    
-    # For now, orphans are assumed to be the smaller inner objects
-    for node in nodes:
-        node = graph.get_node_by_sid(node)
-
-        for orphan in orphans: 
-            orphan = graph.get_node_by_sid(orphan)
-            
-            assert(orphan.value.get_object_type() == 'trust zone')
-        
-            outer_rect = node.rect
-            inner_rect = orphan.rect
-            
-            if outer_rect.is_overlapping(inner_rect):
-                print("found {} {} inside {} {}".format(orphan.value.get_trust_zone(), orphan.sid, node.label, node.sid))
-                node.value.set_trust_zone(
-                    orphan.value.get_trust_zone()
-                )
-                print("Set {} on {} {}".format(node.value.get_trust_zone(), node.label, node.sid))
-    
-    return orphans
-
-def load_graph_into_db(graph):
-    flows = graph.edges.copy()
-
-    for flow in flows:
-        SOURCE = 0
-        DESTINATION = 1
-
-        source = graph.nodes[flow.fr]
-        destination = graph.nodes[flow.to]
-        
-        process = None
-        
-        pair = []
-
-        for node in (source, destination): 
-
-            if node.value.get_object_type() == 'process':
-                process = Node().create(
-                    zone=node.value.get_trust_zone(),
-                    label=node.label,
-                    identifier=node.sid,
-                    data='test',
-                    type=node.value.get_object_type()
-                )
-
-                """
-                before fixup:
-                [entity]--->(process)--->[entity]
-                
-                after fixup:
-                [entity]--_-->[entity]
-                          ^ (process stored as metadata)
-                """
-                if node == source:
-                    # fix up the source
-                    candidates = [flow.fr for flow in flows if flow.to == node.sid]
-                    assert(len(candidates) == 1)
-                    node = graph.nodes[candidates[0]]
-                else:
-                    #fix up the destination
-                    candidates = [flow.to for flow in flows if flow.fr == node.sid]
-                    assert(len(candidates) == 1)
-                    node = graph.nodes[candidates[0]]
-
-                flows.remove(flow)
-
-            pair.append(
-                Node().create(
-                    zone=node.value.get_trust_zone(),
-                    label=node.label,
-                    identifier=node.sid,
-                    data='test',
-                    type=node.value.get_object_type()
-                )
-            )
-
-        Edge.create(
-            source=pair[SOURCE],
-            destination=pair[DESTINATION],
-            process=process,
-            data='test'
-        )
-    
-    return True
-
-def get_flows_with_threats(graph):
+def get_flows_with_threats():
 
     SPOOFING = 'spoofing'
     TAMPERING = 'tampering'
@@ -189,26 +93,34 @@ def output_threats(threats):
 
 def main():
 
-    args = argparse.ArgumentParser(description="Enumerate STRIDE threats from a data flow diagram")
+    args = argparse.ArgumentParser(description="Enumerate STRIDE threats from a data flow diagram and create test case stubs")
     args.add_argument(
-        "--filename", 
+        "--diagram", 
         default="samples/sample.drawio",
         type=argparse.FileType('r'), 
-        help="The draw.io filename containing the data flow diagram")
+        help="The draw.io data flow diagram filename"
+    )
+    filename = args.parse_args().diagram.name
+    
+    args.add_argument(
+        "--featurefile",
+        default=os.path.basename(filename) + ".feature",
+        type=argparse.FileType('w+'),
+        help="The feature filename to write"
+    )
 
-    graph = MxUtils.parse_from_xml(filename=args.parse_args().filename)
-    enrich_graph_from_zone_annotations(graph)
-    load_graph_into_db(graph)
+    graph = MxUtils.parse_from_xml(file=args.parse_args().diagram)
+    dbgraph.enrich_graph_from_zone_annotations(graph)
+    dbgraph.load_graph_into_db(graph)
 
-    threats = get_flows_with_threats(graph)
-    gherkin_candidates = create_gherkins_from_threats(threats) 
+    threats = get_flows_with_threats()
+
+    gherkin_candidates = create_gherkins_from_threats(threats)
+    feature_file = create_feature_file_for_gherkins(filename, gherkin_candidates)
+
+    args.parse_args().featurefile.write(feature_file)
     
-    for gherkin in gherkin_candidates:
-        print(gherkin)
-    
-    #suggest_gherkins_for_candidates()
-    output_threats(threats)
-    
+    output_threats(threats)  
 
 if __name__ == "__main__":
     main()

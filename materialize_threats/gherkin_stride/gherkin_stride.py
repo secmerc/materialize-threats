@@ -41,5 +41,12 @@ def create_gherkins_from_threats(threats):
     
     return gherkins
 
-def create_test_cases_for_gherkins(gherkins):
-    pass
+def create_feature_file_for_gherkins(feature, gherkins):
+    feature_file = Base.feature_bare.substitute(component=feature)
+    for gherkin in gherkins:
+        feature_file += gherkin
+
+    Parser().parse(
+        TokenScanner(feature_file)
+    )
+    return feature_file

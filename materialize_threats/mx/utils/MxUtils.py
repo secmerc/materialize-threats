@@ -72,9 +72,9 @@ def decompress_diagram_to_file(compressed_diagram):
         )
     )
 
-def parse_from_xml(filename):
+def parse_from_xml(file):
 
-    tree = xml.etree.ElementTree.parse(filename)
+    tree = xml.etree.ElementTree.parse(file)
     root = tree.getroot()
 
     diagram = root.find(MxConst.DIAGRAM)

@@ -1,12 +1,17 @@
 import string
 
 class Base():
+    feature_bare = string.Template(
+"""
+Feature: $component
+"""        
+    )
     feature_base = string.Template(
 """
 Feature: $component
     $scenario
 """
-)
+    )
 
 class Scenarios():
     stride = {
