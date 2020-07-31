@@ -1,4 +1,5 @@
 ```
+materialize threats.
                               '             .           .
                            o       '   o  .     '   . O
                         '   .   ' .   _____  '    .      .
@@ -26,7 +27,7 @@
                                      |  )  \
                                      |      \
                                      |       \
-                                     |        `.__,
+                                     |wizardsh`.__,
                                      \_________.-'
 It's magic.
 ```
@@ -36,17 +37,25 @@ Developers and security practitioners who want to perform graph analysis on data
 The analysis implemented by materialize_threats determines STRIDE threats impacting specific flows and elements based on trust zone and flow direction by following the Rapid Threat Model Prototyping methodology.
 
 # What's in the box?
-* Draw.io shape library (dfd-materialize.xml)
-    * Create diagrams supported for analysis
 * materialize_threats python module
-    * Parse supported .drawio file into graph representation (nodes, edges) stored in sqlite
+    * Parse .drawio data flow diagrams into graph representation (nodes, edges) stored in a RDMS
     * SQL (ORM) implementation of Rapid Threat Model Prototyping methodology
+* (Optional) Minimal Draw.io shape library (dfd-materialize.xml)
+    * Tag trust zones more easily
+
 
 # Using
 ## 1. Creating the diagram
-* Use draw.io to import the dfd-materialize.xml shape library
-* Create a data flow diagram using the shapes
+* Use draw.io with the built-in threat modeling shape set, or use ours
+* Create a data flow diagram using some guidelines
+   * Use processes between entities to describe flows
+      * Example: [Entity: Browser] --> (Process: Login) ----> [Entity: API]
+   * Identify trust zones using the green 'security control label'
+   * Processes inherit trust zones from the upstream entity
 * Save it as a .drawio file in a convenient location
+
+### Example
+![](samples/bookface.png)
 
 ## 2. Enumerating threats
 ```
@@ -55,20 +64,12 @@ python3 materialize_threats/materialize.py --filename=/path/to/diagram.drawio
 ```
 
 # Sample data
-Default to sample
 ```
 python3 materialize_threats/materialize.py
 ```
 
-Specify alternate sample
+More samples can be found in the /samples directory
 ```
-python3 materialize_threats/materialize.py --filename=samples/sample.drawio
+python3 materialize_threats/materialize.py --filename=samples/bookface.drawio
 ```
-
-# Resources for Mxgraph
-* https://github.com/jgraph/mxgraph
-* https://github.com/jgraph/mxgraph/blob/7af5a44c5b2d8a4d0fc56d3eebc964c3ca8b82de/java/examples/com/mxgraph/examples/Codec.java
-* https://github.com/jgraph/mxgraph/blob/51382db43061ac4f30a87c835d17e306378b1af4/java/src/com/mxgraph/io/mxCellCodec.java
-* https://github.com/jgraph/mxgraph/blob/51382db43061ac4f30a87c835d17e306378b1af4/java/src/com/mxgraph/io/mxRootChangeCodec.java
-* https://github.com/jgraph/mxgraph/blob/51382db43061ac4f30a87c835d17e306378b1af4/java/src/com/mxgraph/model/mxCell.java
 
