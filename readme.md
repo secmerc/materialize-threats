@@ -65,7 +65,7 @@ python3 materialize_threats/materialize.py --filename=/path/to/diagram.drawio
 ```
 
 ## 3. Creating the feature file
-Materialize threats will create a Gherkin feature file with boilerplate scenarios and mitigations, along with remediation tips.
+Materialize threats will create a Gherkin feature file with boilerplate scenarios and mitigations, along with remediation tips. By default, it uses the diagram filename.
 
 ![](samples/bookface_featurefile.png)
 
