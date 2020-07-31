@@ -46,6 +46,10 @@ The analysis implemented by materialize_threats determines STRIDE threats impact
 
 
 # Using
+
+## Demo
+![](samples/bookface.gif)
+
 ## 1. Creating the diagram
 * Use draw.io with the built-in threat modeling shape set, or use ours
 * Create a data flow diagram using some guidelines
@@ -78,6 +82,3 @@ More samples can be found in the /samples directory
 ```
 python3 materialize_threats/materialize.py --filename=samples/bookface.drawio
 ```
-
-# Demo
-![](samples/bookface.gif)
