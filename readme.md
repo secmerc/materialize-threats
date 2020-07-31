@@ -42,6 +42,7 @@ The analysis implemented by materialize_threats determines STRIDE threats impact
     * SQL (ORM) implementation of Rapid Threat Model Prototyping methodology
 * (Optional) Minimal Draw.io shape library (dfd-materialize.xml)
     * Tag trust zones more easily
+* Gherkin test plan generator
 
 
 # Using
@@ -62,6 +63,11 @@ The analysis implemented by materialize_threats determines STRIDE threats impact
 git clone git@github.com:secmerc/materialize_threats.git
 python3 materialize_threats/materialize.py --filename=/path/to/diagram.drawio
 ```
+
+## 3. Creating the feature file
+Materialize threats will create a Gherkin feature file with boilerplate scenarios and mitigations, along with remediation tips.
+
+![](samples/bookface_featurefile.png)
 
 # Sample data
 ```
