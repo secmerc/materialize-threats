@@ -110,8 +110,8 @@ def main():
     )
 
     graph = MxUtils.parse_from_xml(file=args.parse_args().diagram)
-    dbgraph.enrich_graph_from_zone_annotations(graph)
-    dbgraph.load_graph_into_db(graph)
+    zones = dbgraph.get_node_trust_zones_from_graph(graph)
+    dbgraph.load_graph_into_db(graph, zones)
 
     threats = get_flows_with_threats()
 

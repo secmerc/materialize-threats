@@ -1,6 +1,6 @@
 import xml.etree.ElementTree, io, base64, urllib.parse, collections
 
-from ..models import MxGraph
+from ..models import MxGraph, Edge, Node
 
 from ..io.NodeFactory import NodeFactory
 from ..io.UserObjectFactory import UserObjectFactory
@@ -9,23 +9,40 @@ from ..io.EdgeFactory import EdgeFactory
 from . import MxConst
 from . import deflatedecompress
 
-def decode_xml_element(cell):
-    userobject = None
+def is_edge(element):
+    return element.get('edge') == str(1)
 
+def is_user_object(element):
+    return element.tag == MxConst.USER_OBJECT
+
+def decode_xml_element_to_cell(element, coords):
+    edgefactory = EdgeFactory(coords)
+    nodefactory = NodeFactory(coords)
     userobjectfactory = UserObjectFactory()
 
-    if cell.tag == MxConst.USER_OBJECT:
-        userobject = userobjectfactory.from_xml(cell)
-        
-        id = userobject.xml.get('id')
-        label = userobject.xml.get('label')
-    
-    if userobject is not None:
-        cell = userobject.xml.find(MxConst.CELL)
-        cell.set('id', id)
-        cell.set('label', label)
+    value = element.get('value')
 
-    return cell, userobject
+    if is_edge(element):
+        cell = edgefactory.from_xml(xml=element, value=None)
+        return cell
+        #return edgefactory.from_xml(xml=element, value=None)
+
+    if is_user_object(element):
+        value = userobjectfactory.from_xml(element)
+        
+        id = value.xml.get('id')
+        label = value.xml.get('label')
+    
+        if value is not None:
+            # extract the plain node it wraps, invert the relationship
+            # old: userobject.node
+            element = value.xml.find(MxConst.CELL)
+            element.set('id', id)
+            element.set('label', label)
+
+    cell = nodefactory.from_xml(xml=element, value=value)
+    return cell
+
 
 def get_mxgraph_from_xml(root, elements):
     from ..shapes.CoordsTranslate import CoordsTranslate
@@ -33,22 +50,20 @@ def get_mxgraph_from_xml(root, elements):
 
     coords = CoordsTranslate.from_xml_transform(root)
 
-    edgefactory = EdgeFactory(coords)
-    nodefactory = NodeFactory(coords)
-
     edges = []
     nodes = collections.OrderedDict()
 
     for element in elements:
+        # Every mxGraph contains an existing element of id 0 and 1, skip them
         if element.get('id') == str(0) or element.get('id') == str(1):
             continue
         
-        cell, userobject = decode_xml_element(element)
+        cell = decode_xml_element_to_cell(element, coords)
 
-        if cell.get('edge') == str(1):
-            edges.append(edgefactory.from_xml(cell, userobject))
+        if type(cell) == Edge.Edge:
+            edges.append(cell)
         else:
-            nodes[cell.get('id')] = nodefactory.from_xml(cell, userobject)
+            nodes[cell.sid] = cell
 
     return(MxGraph.MxGraph(nodes=nodes, edges=edges))
 
