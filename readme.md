@@ -79,3 +79,5 @@ More samples can be found in the /samples directory
 python3 materialize_threats/materialize.py --filename=samples/bookface.drawio
 ```
 
+# Demo
+![](samples/bookface.gif)
