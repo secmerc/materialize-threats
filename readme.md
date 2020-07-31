@@ -38,7 +38,7 @@ The analysis implemented by materialize_threats determines STRIDE threats impact
 
 # What's in the box?
 * materialize_threats python module
-    * Parse .drawio data flow diagrams into graph representation (nodes, edges) stored in a RDMS
+    * Parse .drawio data flow diagrams into graph representation (nodes, edges) stored in a RDMS (sqlite in this demo)
     * SQL (ORM) implementation of Rapid Threat Model Prototyping methodology
 * (Optional) Minimal Draw.io shape library (dfd-materialize.xml)
     * Tag trust zones more easily
