@@ -32,9 +32,14 @@ materialize threats.
 It's magic.
 ```
 # Who is this for?
-Developers and security practitioners who want to perform graph analysis on data flow diagrams - using SQL. 
+Developers and security practitioners who want to perform 'graph' analysis on data flow diagrams - **using SQL**. 
 
-The analysis implemented by materialize_threats determines STRIDE threats impacting specific flows and elements based on trust zone and flow direction by following the Rapid Threat Model Prototyping methodology.
+`materialize threats` ingests draw.io data flow diagrams into a database, represents them like a property graph, then uses SQL to answer questions about them. 
+
+Today, we can answer questions like:
+
+* Which STRIDE based threat classes impact the elements and flows in my diagram?
+* What test cases should be considered for this diagram? 
 
 # What's in the box?
 * materialize_threats python module
@@ -44,9 +49,7 @@ The analysis implemented by materialize_threats determines STRIDE threats impact
     * Tag trust zones more easily
 * Gherkin test plan generator
 
-
-# Using
-
+# How do I use it?
 ## Demo
 ![](samples/bookface.gif)
 
