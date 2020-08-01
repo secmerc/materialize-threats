@@ -85,3 +85,6 @@ More samples can be found in the /samples directory
 ```
 python3 materialize_threats/materialize.py --filename=samples/bookface.drawio
 ```
+
+# Is this production ready?
+Not yet - there are no tests written, but im pretty sure it works ;). 
