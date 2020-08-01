@@ -43,7 +43,7 @@ Today, we can answer questions like:
 
 # What's in the box?
 * materialize_threats python module
-    * Parse .drawio data flow diagrams into graph representation (nodes, edges) stored in a RDMS (sqlite in this demo)
+    * Parse .drawio data flow diagrams into graph representation (nodes, edges) stored in a RDBMS (sqlite in this demo)
     * SQL (ORM) implementation of [Rapid Threat Model Prototyping methodology](https://github.com/geoffrey-hill-tutamantic/rapid-threat-model-prototyping-docs) used to generate threat classes
 * (Optional) Minimal Draw.io shape library (dfd-materialize.xml)
     * Tag trust zones more easily
