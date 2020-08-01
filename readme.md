@@ -31,27 +31,27 @@ materialize threats.
                                      \_________.-'
 It's magic.
 ```
-# Who is this for?
+# :confetti_ball: Who is this for?
 Developers and security practitioners who want to perform 'graph' analysis on data flow diagrams - **using SQL**. 
 
 `materialize threats` ingests draw.io data flow diagrams into a database, represents them like a property graph, then uses SQL to answer questions about them. 
 
 Today, we can answer questions like:
 
-* Which STRIDE based threat classes impact the elements and flows in my diagram?
-* What test cases should be considered for this diagram? 
+* What STRIDE based threat classes :warning: impact which elements and flows in my diagram? 
+* What mitigations :lock: & test cases :white_check_mark: should be considered for this diagram? 
 
 These are just a few ideas.
 
-# What's in the box?
+# :moneybag: What's in the box?
 * materialize_threats python module
-    * Parse .drawio data flow diagrams into graph representation (nodes, edges) stored in a RDBMS (sqlite in this demo)
+    * Parse [draw.io](https://github.com/jgraph/drawio-desktop/releases) data flow diagrams into graph representation (nodes, edges) stored in a RDBMS (sqlite in this demo)
     * SQL (ORM) implementation of [Rapid Threat Model Prototyping methodology](https://github.com/geoffrey-hill-tutamantic/rapid-threat-model-prototyping-docs) used to generate threat classes
 * (Optional) Minimal Draw.io shape library (dfd-materialize.xml)
     * Tag trust zones more easily
-* Gherkin + STRIDE test plan generator
+* [Gherkin](https://cucumber.io/docs/gherkin/) + [STRIDE](https://en.wikipedia.org/wiki/STRIDE_(security)) test plan/feature file generator
 
-# How do I use it?
+# :wrench: How do I use it?
 ## Demo
 ![](samples/bookface.gif)
 
@@ -60,7 +60,10 @@ These are just a few ideas.
 * Create a data flow diagram using some guidelines
    * Use processes between entities to describe flows
       * Example: [Entity: Browser] --> (Process: Login) ----> [Entity: API]
-   * Identify trust zones using the green 'security control label'
+   * Identify trust zones using the green 'security control label' following the [Rapid Threat Model Prototyping methodology](https://github.com/geoffrey-hill-tutamantic/rapid-threat-model-prototyping-docs) process
+      * untrusted sources (entities) are 0
+      * sinks (data store) are <=9
+      * +1 or -1 in between
    * Processes inherit trust zones from the upstream entity
 * Save it as a .drawio file in a convenient location
 
@@ -78,7 +81,7 @@ Materialize threats will create a Gherkin feature file with boilerplate scenario
 
 ![](samples/bookface_featurefile.png)
 
-# Sample data
+# :mag_right: Sample data
 ```
 python3 materialize_threats/materialize.py
 ```
@@ -88,7 +91,7 @@ More samples can be found in the /samples directory
 python3 materialize_threats/materialize.py --filename=samples/bookface.drawio
 ```
 
-# Is this production ready?
+# :warning: Is this production ready?
 Not yet.
 * There are no tests written, but im pretty sure it works. 
 * Lots of other python stuff that might horrify you but wont impact functionality that I know of.
