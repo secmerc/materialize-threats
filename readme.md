@@ -41,20 +41,22 @@ Today, we can answer questions like:
 * Which STRIDE based threat classes impact the elements and flows in my diagram?
 * What test cases should be considered for this diagram? 
 
+These are just a few ideas.
+
 # What's in the box?
 * materialize_threats python module
     * Parse .drawio data flow diagrams into graph representation (nodes, edges) stored in a RDBMS (sqlite in this demo)
     * SQL (ORM) implementation of [Rapid Threat Model Prototyping methodology](https://github.com/geoffrey-hill-tutamantic/rapid-threat-model-prototyping-docs) used to generate threat classes
 * (Optional) Minimal Draw.io shape library (dfd-materialize.xml)
     * Tag trust zones more easily
-* Gherkin test plan generator
+* Gherkin + STRIDE test plan generator
 
 # How do I use it?
 ## Demo
 ![](samples/bookface.gif)
 
 ## 1. Creating the diagram
-* Use draw.io with the built-in threat modeling shape set, or use ours
+* Use [draw.io](https://github.com/jgraph/drawio-desktop/releases) with the built-in threat modeling shape set, or use ours
 * Create a data flow diagram using some guidelines
    * Use processes between entities to describe flows
       * Example: [Entity: Browser] --> (Process: Login) ----> [Entity: API]
@@ -87,4 +89,6 @@ python3 materialize_threats/materialize.py --filename=samples/bookface.drawio
 ```
 
 # Is this production ready?
-Not yet - there are no tests written, but im pretty sure it works ;). Lots of other stuff that might horrify you but wont impact functionality that I know of.
+Not yet.
+* There are no tests written, but im pretty sure it works. 
+* Lots of other python stuff that might horrify you but wont impact functionality that I know of.
