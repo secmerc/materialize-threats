@@ -87,4 +87,4 @@ python3 materialize_threats/materialize.py --filename=samples/bookface.drawio
 ```
 
 # Is this production ready?
-Not yet - there are no tests written, but im pretty sure it works ;). 
+Not yet - there are no tests written, but im pretty sure it works ;). Lots of other stuff that might horrify you but wont impact functionality that I know of.
