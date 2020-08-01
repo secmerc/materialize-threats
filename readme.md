@@ -73,6 +73,7 @@ These are just a few ideas.
 ## 2. Enumerating threats
 ```
 git clone git@github.com:secmerc/materialize_threats.git
+pip3 install peewee gherkin-official
 python3 materialize_threats/materialize.py --filename=/path/to/diagram.drawio
 ```
 
