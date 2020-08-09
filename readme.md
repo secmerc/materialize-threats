@@ -74,8 +74,8 @@ These are just a few ideas.
 ```
 git clone git@github.com:secmerc/materialize_threats.git
 cd materialize_threats
-pip3 install -r requirements.txt
-python3 materialize.py --filename=/path/to/diagram.drawio
+pip install -e .
+materialize-threats --diagram=/path/to/diagram.drawio
 ```
 
 ## 3. Creating the feature file
@@ -97,3 +97,6 @@ python3 materialize_threats/materialize.py --filename=samples/bookface.drawio
 Not yet.
 * There are no tests written, but im pretty sure it works. 
 * Lots of other python stuff that might horrify you but wont impact functionality that I know of.
+
+# Handy links
+* https://docs.microsoft.com/en-us/archive/blogs/larryosterman/threat-modeling-again-presenting-the-playsound-threat-model
