@@ -75,7 +75,7 @@ These are just a few ideas.
 git clone git@github.com:secmerc/materialize_threats.git
 cd materialize_threats
 pip3 install -r requirements.txt
-python3 materialize.py --filename=/path/to/diagram.drawio
+python3 materialize.py --diagram=/path/to/diagram.drawio
 ```
 
 ## 3. Creating the feature file
