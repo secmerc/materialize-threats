@@ -90,7 +90,7 @@ python3 materialize_threats/materialize.py
 
 More samples can be found in the /samples directory
 ```
-python3 materialize_threats/materialize.py --filename=samples/bookface.drawio
+python3 materialize_threats/materialize.py --diagram=samples/bookface.drawio
 ```
 
 # :warning: Is this production ready?
