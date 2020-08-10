@@ -72,11 +72,8 @@ These are just a few ideas.
 
 ## 2. Enumerating threats
 ```
-git clone git@github.com:secmerc/materialize_threats.git
-cd materialize_threats
-pip install .
+pip install materialize-threats
 materialize-threats --diagram=/path/to/diagram.drawio
-
 ```
 
 ## 3. Creating the feature file
