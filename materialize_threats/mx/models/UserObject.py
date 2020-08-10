@@ -65,11 +65,17 @@ class UserObject(GraphObj):
 
     @classmethod 
     def infer_type_from_node(cls, node):
+
+        TRUST_ZONE = 'text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;'
+        ELEMENT = 'rounded=0;whiteSpace=wrap;html=1;'
+        PROCESS = 'ellipse;whiteSpace=wrap;html=1;aspect=fixed;'
+        DATA_STORE = 'shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=none;'
+
         types = {
-            'trust zone': 'text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;',
-            'element': 'rounded=0;whiteSpace=wrap;html=1;',
-            'process': 'ellipse;whiteSpace=wrap;html=1;aspect=fixed;',
-            'data store': "shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=none;"
+            'trust zone': TRUST_ZONE,
+            'element': ELEMENT,
+            'process': PROCESS,
+            'data store': DATA_STORE
         
         }
         
@@ -79,13 +85,3 @@ class UserObject(GraphObj):
                     return key
 
         return None
-
-"""
-class ZoneObject(UserObject):
-    def __init__(self, xml, label):
-        super(ZoneObject, self).__init__(xml, label)
-    
-    def get_trust_zone(self):
-        zone = self.xml.get(self.LABEL)
-        return zone.lower().split(self.ZONE_PREFIX)[self.ZONE_INDEX]
-"""
