@@ -119,7 +119,7 @@ class ThreatMaterializer(object):
         threats = cls.get_flows_with_threats()
 
         gherkin_candidates = create_gherkins_from_threats(threats)
-        feature_file = create_feature_file_for_gherkins(filename, gherkin_candidates)
+        feature_file = create_feature_file_for_gherkins(feature=filename, gherkins=gherkin_candidates)
 
         args.parse_args().featurefile.write(feature_file)
         
