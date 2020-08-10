@@ -34,7 +34,7 @@ It's magic.
 # :confetti_ball: Who is this for?
 Developers and security practitioners who want to perform 'graph' analysis on data flow diagrams - **using SQL**. 
 
-`materialize threats` ingests draw.io data flow diagrams into a database, represents them like a property graph, then uses SQL to answer questions about them. 
+`materialize-threats` ingests draw.io data flow diagrams into a database, represents them like a property graph, then uses SQL to answer questions about them. 
 
 Today, we can answer questions like:
 
@@ -74,8 +74,9 @@ These are just a few ideas.
 ```
 git clone git@github.com:secmerc/materialize_threats.git
 cd materialize_threats
-pip3 install -r requirements.txt
-python3 materialize.py --diagram=/path/to/diagram.drawio
+pip install .
+materialize-threats --diagram=/path/to/diagram.drawio
+
 ```
 
 ## 3. Creating the feature file
@@ -85,15 +86,29 @@ Materialize threats will create a Gherkin feature file with boilerplate scenario
 
 # :mag_right: Sample data
 ```
-python3 materialize_threats/materialize.py
+materialize-threats
 ```
 
 More samples can be found in the /samples directory
 ```
-python3 materialize_threats/materialize.py --diagram=samples/bookface.drawio
+materialize-threats --diagram=samples/bookface.drawio
 ```
 
 # :warning: Is this production ready?
 Not yet.
 * There are no tests written, but im pretty sure it works. 
 * Lots of other python stuff that might horrify you but wont impact functionality that I know of.
+
+# :computer: Development
+```
+git clone git@github.com:secmerc/materialize_threats.git
+cd materialize_threats
+python3 -m venv ./venv
+source ./venv/bin/activate
+pip install -e .
+pytest
+```
+
+# :link: Links
+* https://docs.microsoft.com/en-us/archive/blogs/larryosterman/threat-modeling-again-presenting-the-playsound-threat-model
+* https://github.com/geoffrey-hill-tutamantic/rapid-threat-model-prototyping-docs
