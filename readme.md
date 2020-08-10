@@ -1,3 +1,4 @@
+![Upload Python Package](https://github.com/secmerc/materialize_threats/workflows/Upload%20Python%20Package/badge.svg)
 ```
 materialize threats.
                               '             .           .
