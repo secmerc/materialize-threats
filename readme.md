@@ -76,6 +76,7 @@ git clone git@github.com:secmerc/materialize_threats.git
 cd materialize_threats
 pip install .
 materialize-threats --diagram=/path/to/diagram.drawio
+
 ```
 
 ## 3. Creating the feature file
