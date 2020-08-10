@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="materialize-threats-secmerc", # Replace with your own username
+    name="materialize-threats",
     version="1.0.0",
     author="Jacob Salassi",
     author_email="author@example.com",
@@ -25,6 +25,6 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
     entry_points = {
-        'console_scripts': ['materialize-threats=materialize_threats.materialize:ThreatMaterializer.materialize'],
+        'console_scripts': ['materialize_threats=materialize_threats.materialize:ThreatMaterializer.materialize'],
     }
 )
