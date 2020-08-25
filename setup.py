@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="materialize-threats",
-    version="1.0.3",
+    version="1.0.4",
     author="Jacob Salassi",
     author_email="author@example.com",
     description="Analyze draw.io data flow diagrams for STRIDE threat classes",
