@@ -68,6 +68,12 @@ These are just a few ideas.
    * Processes inherit trust zones from the upstream entity
 * Save it as a .drawio file in a convenient location
 
+Some notes about how to make the diagram:
+* You don't need to include a Trust Boundary - it won't get parsed and has no bearing on the threats which appear
+* You don't need to include the STRIDE labels - we generate the threats for you!
+* Bi-directional flows are currently not supported - flows move in one direction. In some cases, data might flow from Entity A to Entity B, while data also flows from Entity B to Entity A; model these as two separate flows and you'll be fine.
+* Entities must talk to other entities through processes - the process is mandatory and must be included.
+
 ### Example
 ![](samples/bookface.png)
 
