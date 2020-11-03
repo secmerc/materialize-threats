@@ -23,7 +23,7 @@ class ThreatMaterializer(object):
         DESTINATION_ZONE =  'destinationZone'
         PROCESS = 'process'
 
-        threats = { 
+        threats = {
             SPOOFING: [],
             TAMPERING: [],
             REPUDIATION: [],
@@ -38,9 +38,9 @@ class ThreatMaterializer(object):
 
         edgequery = (
             Edge.select(
-                Source.label.alias(SOURCE), 
+                Source.label.alias(SOURCE),
                 Source.zone.alias(SOURCE_ZONE),
-                Destination.label.alias(DESTINATION), 
+                Destination.label.alias(DESTINATION),
                 Destination.zone.alias(DESTINATION_ZONE),
                 Process.label.alias(PROCESS)
             )
@@ -49,7 +49,7 @@ class ThreatMaterializer(object):
             .join(Process, on=(Process.id == Edge.process))
             .switch(Destination)
             .join(Destination, on=(Destination.id == Edge.destination))
-        ) 
+        )
 
         threats[ELEVATION_OF_PRIVILEGE] = list(
             edgequery.where(
@@ -59,7 +59,7 @@ class ThreatMaterializer(object):
 
         threats[SPOOFING] = list(
         edgequery.where(
-                (Source.zone == 0) & 
+                (Source.zone == 0) &
                 (Destination.zone == 1)
             ).dicts()
         )
@@ -74,7 +74,7 @@ class ThreatMaterializer(object):
 
         threats[DENIAL_OF_SERVICE] = list(
             edgequery.where(
-                (Source.zone == 0) & 
+                (Source.zone == 0) &
                 (Destination.zone == 1)
             ).dicts()
         )
@@ -98,13 +98,13 @@ class ThreatMaterializer(object):
 
         args = argparse.ArgumentParser(description="Enumerate STRIDE threats from a data flow diagram and create test case stubs")
         args.add_argument(
-            "--diagram", 
+            "--diagram",
             default="samples/sample.drawio",
-            type=argparse.FileType('r'), 
+            type=argparse.FileType('r'),
             help="The draw.io data flow diagram filename"
         )
         filename = args.parse_args().diagram.name
-        
+
         args.add_argument(
             "--featurefile",
             default=os.path.basename(filename) + ".feature",
@@ -122,6 +122,6 @@ class ThreatMaterializer(object):
         feature_file = create_feature_file_for_gherkins(feature=filename, gherkins=gherkin_candidates)
 
         args.parse_args().featurefile.write(feature_file)
-        
-        cls.output_threats(threats)  
+
+        cls.output_threats(threats)
 

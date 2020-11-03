@@ -26,20 +26,27 @@ class UserObject(GraphObj):
             if i != last_text:
                 value += "<hr size='1'/>"
         return value
-    
+
     @classmethod
     def get_trust_zone_from_node_label(cls, label):
+        # Sometimes we pass in a UserObject instead of a label
+        if type(label) != str:
+            label = label.label
         if label is not None:
-            zone = label.lower().split(cls.ZONE_PREFIX)[cls.ZONE_INDEX]
-            if cls._is_valid_trust_zone(zone):
-                return zone
-        
+            try:
+                zone = label.lower().split(cls.ZONE_PREFIX)[cls.ZONE_INDEX]
+                zone = zone.replace('</b>', '')
+                if cls._is_valid_trust_zone(zone):
+                    return zone
+            except:
+                print(f'found unparsable object with label {label}, skipping')
+                return None
         return None
 
     def get_trust_zone(self):
-  
+
         zone = self.xml.get(self.LABEL)
-        
+
         if zone is not None:
             try:
                 zone = zone.lower().split(self.ZONE_PREFIX)[self.ZONE_INDEX]
@@ -63,7 +70,7 @@ class UserObject(GraphObj):
         if type in self.TYPES:
             return type
 
-    @classmethod 
+    @classmethod
     def infer_type_from_node(cls, node):
 
         TRUST_ZONE = 'text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;'
@@ -76,12 +83,12 @@ class UserObject(GraphObj):
             'element': ELEMENT,
             'process': PROCESS,
             'data store': DATA_STORE
-        
+
         }
-        
+
         for text in node.texts:
             for key, value in types.items():
-                if text.text == value: 
+                if text.text == value:
                     return key
 
         return None
