@@ -1,5 +1,6 @@
 from . import db, Node, Edge, dbgraph
 from ..mx.models.UserObject import UserObject
+import re
 
 def node_is_user_object(node):
     value = node.value
@@ -69,6 +70,7 @@ def load_graph_into_db(graph, zones):
         pair = []
 
         for node in (source, destination):
+            node.label = re.sub('(<[a-zA-Z]>|<\/[a-zA-Z]>)', '', node.label)
             print("inspecting {} {}".format(node.label, node.sid))
             element_type = None
 
