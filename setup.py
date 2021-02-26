@@ -8,10 +8,10 @@ setuptools.setup(
     version="1.0.5",
     author="Jacob Salassi",
     author_email="author@example.com",
-    description="Analyze draw.io data flow diagrams for STRIDE threat classes",
+    description="Copy of secmerc's materialize threats to test pypi publishing",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/secmerc/materialize-threats",
+    url="https://github.com/sfc-gh-nsfard/materialize-threats",
     packages=setuptools.find_packages(),
     install_requires=[
           'peewee',
