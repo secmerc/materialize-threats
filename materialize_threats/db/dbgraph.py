@@ -11,6 +11,35 @@ def get_node_trust_zones_from_graph(graph):
     zones = dict()
     nodes = set(graph.nodes.keys())
     edges = set()
+
+    graph_edges = graph.edges
+
+    # if a destination node is a trust zone (ie it's overlapped by another node) then set the edge's destination to the overlapped node
+    # if a source node is a trust zone (ie it's overlapped by another node) then set the edge's source to the overlapped node
+
+    for node in nodes:
+        node_sid = node
+        node = graph.get_node_by_sid(node_sid)
+        for index, edge in enumerate(graph_edges):
+            dest_node = graph.get_node_by_sid(edge.to)
+            source_node = graph.get_node_by_sid(edge.fr)
+
+            outer_rect = node.rect
+            dest_rect = dest_node.rect
+            source_rect = source_node.rect
+
+            if outer_rect.is_overlapping(dest_rect) and node is not dest_node:
+                if (node_is_user_object(dest_node) and dest_node.value.get_object_type() == 'trust zone') or (not node_is_user_object(dest_node) and UserObject.get_trust_zone_from_node_label(dest_node.value is not None)):
+                    print('updating dest of ' + source_node.label + ' from ' + dest_node.label + ' to ' + node.label)
+                    graph.edges[index].to = node_sid
+
+
+
+            if outer_rect.is_overlapping(source_rect) and node is not source_node:
+                if (node_is_user_object(source_node) and source_node.value.get_object_type() == 'trust zone') or (not node_is_user_object(source_node) and UserObject.get_trust_zone_from_node_label(source_node.value is not None)):
+                    print('updating source of ' + dest_node.label + ' from ' + source_node.label + ' to ' + node.label)
+                    graph.edges[index].fr = node_sid
+
     for edge in graph.edges:
         edges.add(edge.to)
         edges.add(edge.fr)
