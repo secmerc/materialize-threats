@@ -4,14 +4,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="materialize-threats",
-    version="1.0.4",
-    author="Jacob Salassi",
+    name="materialize-threats-nathan",
+    version="1.0.0",
+    author="Nathan Sfard",
     author_email="author@example.com",
-    description="Analyze draw.io data flow diagrams for STRIDE threat classes",
+    description="Copy of secmerc's materialize threats to test pypi publishing",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/secmerc/materialize-threats",
+    url="https://github.com/sfc-gh-nsfard/materialize-threats",
     packages=setuptools.find_packages(),
     install_requires=[
           'peewee',
