@@ -8,7 +8,7 @@ setuptools.setup(
     version="1.0.5",
     author="Jacob Salassi",
     author_email="author@example.com",
-    description="Copy of secmerc's materialize threats to test pypi publishing",
+    description="Analyze draw.io data flow diagrams for STRIDE threat classes",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/sfc-gh-nsfard/materialize-threats",
