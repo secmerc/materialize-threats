@@ -48,8 +48,6 @@ These are just a few ideas.
 * materialize_threats python module
     * Parse [draw.io](https://github.com/jgraph/drawio-desktop/releases) data flow diagrams into graph representation (nodes, edges) stored in a RDBMS (sqlite in this demo)
     * SQL (ORM) implementation of [Rapid Threat Model Prototyping methodology](https://github.com/geoffrey-hill-tutamantic/rapid-threat-model-prototyping-docs) used to generate threat classes
-* (Optional) Minimal Draw.io shape library (dfd-materialize.xml)
-    * Tag trust zones more easily
 * [Gherkin](https://cucumber.io/docs/gherkin/) + [STRIDE](https://en.wikipedia.org/wiki/STRIDE_(security)) test plan/feature file generator
 
 # :wrench: How do I use it?
@@ -57,7 +55,7 @@ These are just a few ideas.
 ![](samples/bookface.gif)
 
 ## 1. Creating the diagram
-* Use [draw.io](https://github.com/jgraph/drawio-desktop/releases) with the built-in threat modeling shape set, or use ours
+* Use [draw.io](https://github.com/jgraph/drawio-desktop/releases) with the built-in Threat Modeling Shape Library
 * Create a data flow diagram using some guidelines
    * Use processes between entities to describe flows
       * Example: [Entity: Browser] --> (Process: Login) ----> [Entity: API]
