@@ -11,7 +11,7 @@ setuptools.setup(
     description="Analyze draw.io data flow diagrams for STRIDE threat classes",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/sfc-gh-nsfard/materialize-threats",
+    url="https://github.com/secmerc/materialize-threats",
     packages=setuptools.find_packages(),
     install_requires=[
           'peewee',
