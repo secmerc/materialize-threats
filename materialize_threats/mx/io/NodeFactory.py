@@ -27,10 +27,10 @@ class NodeFactory:
             gid=xml.get('parent'),
             value=value,
             rect=Rect(
-                x=int(xml.find('mxGeometry').get('x')),
-                y=int(xml.find('mxGeometry').get('y')),
-                width=int(xml.find('mxGeometry').get('width')),
-                height=int(xml.find('mxGeometry').get('height'))
+                x=float(xml.find('mxGeometry').get('x')),
+                y=float(xml.find('mxGeometry').get('y')),
+                width=float(xml.find('mxGeometry').get('width')),
+                height=float(xml.find('mxGeometry').get('height'))
             ),
             label=label,
             texts=texts,
