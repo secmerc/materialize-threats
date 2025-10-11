@@ -49,7 +49,7 @@ class UserObject(GraphObj):
 
         if zone is not None:
             try:
-                zone = zone.lower().split(self.ZONE_PREFIX)[self.ZONE_INDEX]
+                zone = zone.lower().split(self.ZONE_PREFIX)[self.ZONE_INDEX][0] # we assume zone numbers are always one digit so we only get the value at the first index
             except IndexError:
                 pass
             else:
@@ -73,22 +73,35 @@ class UserObject(GraphObj):
     @classmethod
     def infer_type_from_node(cls, node):
 
-        TRUST_ZONE = 'text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;'
+        TRUST_ZONE = 'text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;'
         ELEMENT = 'rounded=0;whiteSpace=wrap;html=1;'
         PROCESS = 'ellipse;whiteSpace=wrap;html=1;aspect=fixed;'
-        DATA_STORE = 'shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=none;'
+        DATA_STORE = 'shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;'
+
+        trust_zone_attributes = TRUST_ZONE.split(';')
+        element_attributes = ELEMENT.split(';')
+        process_attributes = PROCESS.split(';')
+        data_store_attributes = DATA_STORE.split(';')
 
         types = {
-            'trust zone': TRUST_ZONE,
-            'element': ELEMENT,
-            'process': PROCESS,
-            'data store': DATA_STORE
+            'trust zone': trust_zone_attributes,
+            'element': element_attributes,
+            'process': process_attributes,
+            'data store': data_store_attributes
 
         }
 
-        for text in node.texts:
-            for key, value in types.items():
-                if text.text == value:
-                    return key
+        inferred_type = None
 
-        return None
+        for text in node.texts:
+            text_attributes = text.text.split(';')
+
+            for key, value in types.items():
+                inferred_type = key
+
+                for attribute in value:
+                    if attribute not in text_attributes:
+                        inferred_type = None
+                        break
+
+        return inferred_type
