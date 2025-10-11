@@ -54,7 +54,7 @@ Scenario: Repudiation
 """
 Scenario: Information Disclosure
     Given $process causes data to flow from a more trusted $source in $sourceZone to a less trusted $destination in $destinationZone
-    When $source attempts to gain access to information it is not authorized to see related to $process
+    When $destination attempts to gain access to information it is not authorized to see related to $process
     Then ensure data is protected everywhere by ...
 
 # Mitigation details
